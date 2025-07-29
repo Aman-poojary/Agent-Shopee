@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy Streamlit app
-COPY streamlit_app.py .
+# Copy Streamlit app from frontend folder
+COPY frontend/streamlit_app.py .
 
 # Expose Streamlit port
 EXPOSE 8501

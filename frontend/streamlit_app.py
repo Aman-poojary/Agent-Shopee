@@ -67,13 +67,15 @@ def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox(
         "Choose a page",
-        ["Dashboard", "Health Check", "User Management", "API Documentation"]
+        ["Dashboard", "Health Check", "Agent Chat", "User Management", "API Documentation"]
     )
     
     if page == "Dashboard":
         show_dashboard()
     elif page == "Health Check":
         show_health_check()
+    elif page == "Agent Chat":
+        show_agent_chat()
     elif page == "User Management":
         show_user_management()
     elif page == "API Documentation":
@@ -126,6 +128,78 @@ def show_health_check():
                     st.error(f"**Error:** {connection_status['error']}")
                 if connection_status["status_code"]:
                     st.error(f"**Status Code:** {connection_status['status_code']}")
+
+def show_agent_chat():
+    st.header("🤖 Agent Chat")
+    
+    st.markdown("""
+    ### Chat with the AI Agent
+    This agent uses Google's Gemini model to process your input and provide intelligent responses.
+    """)
+    
+    # Chat interface
+    st.subheader("Chat Interface")
+    
+    # Initialize chat history in session state
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    
+    # Display chat history
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+    
+    # Chat input
+    if prompt := st.chat_input("What would you like to ask the agent?"):
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        
+        # Display user message
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        
+        # Get agent response
+        with st.chat_message("assistant"):
+            with st.spinner("Agent is thinking..."):
+                try:
+                    response = requests.post(
+                        f"{API_BASE_URL}/api/v1/agent/",
+                        json={"input_string": prompt},
+                        timeout=30
+                    )
+                    
+                    if response.status_code == 200:
+                        result = response.json()
+                        if result.get("success"):
+                            agent_response = result.get("result", "No response from agent")
+                            st.markdown(agent_response)
+                            # Add assistant message to chat history
+                            st.session_state.messages.append({"role": "assistant", "content": agent_response})
+                        else:
+                            st.error(f"Agent error: {result.get('message', 'Unknown error')}")
+                    else:
+                        st.error(f"API Error: {response.status_code} - {response.text}")
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Connection Error: {str(e)}")
+    
+    # Clear chat button
+    if st.button("Clear Chat History"):
+        st.session_state.messages = []
+        st.rerun()
+    
+    # Agent information
+    with st.expander("ℹ️ Agent Information"):
+        st.markdown("""
+        **Agent Features:**
+        - Powered by Google Gemini 2.5 Flash
+        - Uses ReAct (Reasoning and Acting) framework
+        - Has conversation memory
+        - Can use custom tools for specific tasks
+        
+        **Available Tools:**
+        - Word length calculator
+        - More tools can be added as needed
+        """)
 
 def show_user_management():
     st.header("👥 User Management")
@@ -194,6 +268,9 @@ def show_api_docs():
     
     #### Health Check
     - **GET** `/health` - Check API health status
+    
+    #### Agent
+    - **POST** `/api/v1/agent/` - Process input with AI agent
     
     #### Users
     - **GET** `/api/v1/users/` - Get all users

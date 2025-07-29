@@ -1,5 +1,7 @@
 # agent service logic basically agent logic part.
 from typing import Optional
+from app.agent.react_agent import MyReactAgent
+import json
 
 class AgentService:
     @classmethod
@@ -7,6 +9,7 @@ class AgentService:
         if not input_string or input_string.strip() == "":
             return "Please provide a valid input string."
         
-        processed_response = f"Agent processed: {input_string.strip()}"
-
-        return processed_response
+        react_agent = MyReactAgent()
+        agent_response = react_agent.invoke(input_string.strip())
+        print(agent_response)
+        return json.dumps(agent_response)

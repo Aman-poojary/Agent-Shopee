@@ -1,6 +1,3 @@
-#to do 
-#create a post route to accept a string and return a string which will call the function in the service folder
-
 from fastapi import APIRouter, HTTPException
 from app.models.agent import AgentRequest, AgentResponse
 from app.services.agent import AgentService
