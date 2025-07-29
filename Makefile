@@ -36,7 +36,7 @@ logs:
 
 # Run locally for development
 dev:
-	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+	uvicorn app.main:app --reload --host localhost --port 8000
 
 # Run Streamlit UI locally
 streamlit:
