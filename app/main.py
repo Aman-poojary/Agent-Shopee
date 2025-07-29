@@ -1,23 +1,23 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
 from app.routes import health, agent
-from app.config import settings
+# from app.config import settings
 
 # Create FastAPI app
 app = FastAPI(
-    title=settings.project_name,
+    title="Agent mama",
     description="A FastAPI application with proper structure",
     version="1.0.0"
 )
 
 # Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.allowed_hosts,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=settings.allowed_hosts,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 # Include routers
 app.include_router(health.router, tags=["health"])
