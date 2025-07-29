@@ -1,0 +1,1 @@
+# Placeholder for product search logic and FAISS integration 
