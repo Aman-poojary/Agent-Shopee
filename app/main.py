@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import health, users, agent
+from app.routes import health, agent
 from app.config import settings
 
 # Create FastAPI app
@@ -21,8 +21,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(health.router, tags=["health"])
-app.include_router(users.router, prefix="/api/v1")
-app.include_router(agent.router, prefix="/agent")
+app.include_router(agent.router, prefix="/api/v1")
 
 @app.get("/")
 def root():
