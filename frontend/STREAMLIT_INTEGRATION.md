@@ -1,4 +1,4 @@
-# 🚀 FastAPI + Streamlit Integration Guide
+ # 🚀 FastAPI + Streamlit Integration Guide
 
 This guide explains how to integrate Streamlit as a frontend UI for your FastAPI backend.
 

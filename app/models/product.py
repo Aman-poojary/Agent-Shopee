@@ -1,0 +1,1 @@
+# Placeholder for product-related Pydantic models 
